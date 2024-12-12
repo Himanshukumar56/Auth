@@ -1,6 +1,7 @@
 import { User } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { generateVerificationToken } from "../utils/generateVerificationToken.js";
+import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -26,7 +27,18 @@ export const signup = async (req, res) => {
 
     await user.save();
     //jwt
-    generateTokenAndSetCookie(res,user._id);
+    generateTokenAndSetCookie(res, user._id);
+    res.status(201).json({
+      success: true,
+      message: "User Created Successfully",
+      user: {
+        // _id: user._id,
+        // email: user.email,
+        // name : user.name,
+        ...user._doc,
+        password: undefined,
+      },
+    });
   } catch (error) {
     return res.status(400).json({ success: false, message: error.message });
   }
