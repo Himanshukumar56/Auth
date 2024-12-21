@@ -5,6 +5,7 @@ import { generateVerificationToken } from "../utils/generateVerificationToken.js
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
 import { sendVerificationEmail } from "../mailtrap/emails.js";
 import { sendWelcomeEmail } from "../mailtrap/emails.js";
+import { sendPasswordResetEmail } from "../mailtrap/emails.js";
 
 export const signup = async (req, res) => {
   const { email, password, name } = req.body;
@@ -139,9 +140,26 @@ export const forgotPassword = async (req, res) => {
       });
     }
     const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetTokenExpiresAt = Date.now() + 60*60*1000;
+    const resetTokenExpiresAt = Date.now() + 1*60 * 60 * 1000;
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpiresAt = resetTokenExpiresAt;
     await user.save();
-  } catch (error) {}
+    //send email
+    await sendPasswordResetEmail(
+      user.email,
+      `${process.env.CLIENT_URL}/reset-password/${resetToken}`
+    );
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Password reset link to sent to you via Email",
+      });
+  } catch (error) {
+    console.log("Error in forgot password", error);
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
