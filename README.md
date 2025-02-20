@@ -10,10 +10,10 @@ A modern and user-friendly dashboard system that allows users to sign up, log in
 - 🔄 **Forgot Password**: Users can reset their password via email verification.
 
 ## 🏗️ Tech Stack 🏗️
-- 🎨 **Frontend**: React / Next.js (Optional)
+- 🎨 **Frontend**: React 
 - ⚙️ **Backend**: Node.js / Express
-- 🗄️ **Database**: MongoDB / PostgreSQL
-- 🔑 **Authentication**: JWT / OAuth
+- 🗄️ **Database**: MongoDB 
+- 🔑 **Authentication**: JWT 
 - 📬 **Email Service**: Mailtrap
 
 ## 📦 Installation 📦
